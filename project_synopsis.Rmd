@@ -1,11 +1,9 @@
 ---
-title: "project_synopsis"
-output: html_document
+title: "Project synopsis"
+output:
+  pdf_document: default
 date: '2022-04-06'
 ---
-
-# Project synopsis
-
 ## Group 5: Astrid (s184248), Caroline (s183493), Christian (s165476), 
 ## Frederik (s184260) and Nils (s220672)
 
