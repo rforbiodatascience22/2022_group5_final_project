@@ -12,8 +12,5 @@ date: '2022-04-06'
 Link to dataset: XXXX
 
 We plan to tidy the data (filter, select, pivot_longer drop.na and what else 
-might be necessary). Then, we plan to redo the DEseq analysis plots and 
+might be necessary). Then, we plan to redo the XX analysis plots and 
 do a couple of our own plots to explore any trends in the data. 
-
-git config --global user.email "afibe@dtu.dk"
-  git config --global user.name "Your Name"
