@@ -1,17 +1,40 @@
-# Load libraries ----------------------------------------------------------
+# Load libraries ---------------------------------------------------------------
 library("tidyverse")
 
 
-# Define functions --------------------------------------------------------
+# Define functions -------------------------------------------------------------
 source(file = "R/99_project_functions.R")
 
 
-# Load data ---------------------------------------------------------------
+# Load data --------------------------------------------------------------------
 sample_attributes <- read_tsv(file = "data/_raw/SampleAttributesDS.tsv")
 subject_phenotypes <- read_tsv(file = "data/_raw/SubjectPhenotypesDS.tsv")
 
-# Clean data ------------------------------------------------------------
-TISSUE_OF_INTEREST <- c("Lung")
+# Clean phenotypes -------------------------------------------------------------
+subject_phenotypes_clean <- subject_phenotypes %>% 
+  rename(patient_id = SUBJID,
+         sex = SEX, 
+         age = AGE, 
+         death_severity = DTHHRDY) %>% 
+  mutate(
+    sex = case_when(
+      sex == 1 ~ "Male",
+      sex == 2 ~ "Female"
+    ),
+    death_severity = case_when(
+      death_severity == 0 ~ "Ventilator_Case",
+      death_severity == 1 ~ "Violent_Fast_Death",
+      death_severity == 2 ~ "Natural_Fast_Death",
+      death_severity == 3 ~ "Intermediate_Death",
+      death_severity == 4 ~ "Slow_Death"
+    )
+  ) 
+  
+
+write_tsv(subject_phenotypes_clean, "data/subject_phenotypes_clean.tsv")
+
+# Clean sample attributes ------------------------------------------------------
+TISSUES_OF_INTEREST <- c("Lung")
 
 sample_attributes_clean <- sample_attributes %>% 
   select(SAMPID,
@@ -27,37 +50,49 @@ sample_attributes_clean <- sample_attributes %>%
          method = SMAFRZE,
          tissue = SMTSD,
          mapping_rate = SMMAPRT,
-         rrna_rate = SMRRNART) %>%
+         rrna_rate = SMRRNART) %>% 
   mutate(patient_id = substring(text = sample_id, 
                                 first = 1, 
                                 last = 10)) %>%
+  relocate(patient_id) %>% 
   filter(rin > 7 & 
            mapping_rate > 0.9 &
            rrna_rate < 0.15 & 
            method == "RNASEQ" &
-           tissue %in% TISSUE_OF_INTEREST)
+           tissue %in% TISSUES_OF_INTEREST) %>% 
+  select(-method)
+
+write_tsv(sample_attributes_clean, "data/sample_attributes_clean.tsv")
   
-# Reading gene counts ------------------------------------------------------------
+# Reading gene counts ----------------------------------------------------------
+# We can use dataset with n_max or by loading the entire thing, 
+# subsetting the columns, and saving it again to then load it.
 gene_counts <- read_tsv("data/_raw/gene_reads.tsv", 
                         skip = 2, lazy = TRUE) %>% 
   select(Name, 
          Description, 
          pull(sample_attributes_clean, 
               sample_id)
+  )
+
+write_tsv(gene_counts, "data/gene_reads_tissue.tsv")
+
+# Remove the original tibble due to the size of the file -----------------------
+rm(gene_counts)
+gc()
+
+# Cleaning gene counts ---------------------------------------------------------
+gene_counts_clean <- read_tsv("data/gene_reads_tissue.tsv") %>% 
+  rename(gencode_id = Name, 
+         gene_symbol = Description) %>% 
+  mutate(sum_counts = rowSums(
+    select(., 
+           -gencode_id, 
+           -gene_symbol)
+    )
   ) %>% 
-  distinct(Description, .keep_all= TRUE)
+  filter(sum_counts > 10) %>% 
+  select(-sum_counts)
 
-gene_counts
+write_tsv(gene_counts_clean, "data/gene_reads_clean.tsv")
 
-dim(gene_counts)
-rowSums(gene_counts[1:dim(gene_counts)[1],3:dim(gene_counts)[2]])
-  
-# Wrangle data ------------------------------------------------------------
-my_data_clean <- my_data # %>% ...
-
-
-
-
-# Write data --------------------------------------------------------------
-write_tsv(x = my_data_clean,
-          file = "data/02_my_data_clean.tsv")
