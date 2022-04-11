@@ -6,14 +6,18 @@ library("tidyverse")
 source(file = "R/99_project_functions.R")
 
 
-# Load data ---------------------------------------------------------------
-my_data_raw <- read_tsv(file = "data/_raw/my_raw_data.tsv")
+# Download data ---------------------------------------------------------------
+download.file(
+  url = "https://storage.googleapis.com/gtex_analysis_v8/annotations/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt",
+  destfile = "data/_raw/SampleAttributesDS.tsv"
+)
 
+download.file(
+  url = "https://storage.googleapis.com/gtex_analysis_v8/annotations/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt",
+  destfile = "data/_raw/SubjectPhenotypesDS.tsv"
+)
 
-# Wrangle data ------------------------------------------------------------
-my_data <- my_data_raw # %>% ...
-
-
-# Write data --------------------------------------------------------------
-write_tsv(x = my_data,
-          file = "data/01_my_data.tsv")
+download.file(
+  url = "https://storage.googleapis.com/gtex_analysis_v8/rna_seq_data/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct.gz",
+  destfile = "data/_raw/gene_reads.tsv.gz"
+)
