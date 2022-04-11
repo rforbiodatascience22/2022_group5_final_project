@@ -11,7 +11,7 @@ sample_attributes <- read_tsv(file = "data/_raw/SampleAttributesDS.tsv")
 subject_phenotypes <- read_tsv(file = "data/_raw/SubjectPhenotypesDS.tsv")
 
 # Clean data ------------------------------------------------------------
-TISSUE_OF_INTEREST <- c("Muscle - Skeletal","Lung")
+TISSUE_OF_INTEREST <- c("Lung")
 
 sample_attributes_clean <- sample_attributes %>% 
   select(SAMPID,
@@ -38,8 +38,19 @@ sample_attributes_clean <- sample_attributes %>%
            tissue %in% TISSUE_OF_INTEREST)
   
 # Reading gene counts ------------------------------------------------------------
-gene_counts <- read_tsv("data/_raw/gene_reads.tsv.gz")
-  
+gene_counts <- read_tsv("data/_raw/gene_reads.tsv", 
+                        skip = 2, lazy = TRUE) %>% 
+  select(Name, 
+         Description, 
+         pull(sample_attributes_clean, 
+              sample_id)
+  ) %>% 
+  distinct(Description, .keep_all= TRUE)
+
+gene_counts
+
+dim(gene_counts)
+rowSums(gene_counts[1:dim(gene_counts)[1],3:dim(gene_counts)[2]])
   
 # Wrangle data ------------------------------------------------------------
 my_data_clean <- my_data # %>% ...
