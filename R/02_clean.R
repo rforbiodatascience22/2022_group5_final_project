@@ -31,7 +31,7 @@ subject_phenotypes_clean <- subject_phenotypes %>%
   ) 
   
 
-write_tsv(subject_phenotypes_clean, "data/subject_phenotypes_clean.tsv")
+write_tsv(subject_phenotypes_clean, "data/02_subject_phenotypes_clean.tsv")
 
 # Clean sample attributes ------------------------------------------------------
 TISSUES_OF_INTEREST <- c("Lung")
@@ -62,27 +62,27 @@ sample_attributes_clean <- sample_attributes %>%
            tissue %in% TISSUES_OF_INTEREST) %>% 
   select(-method)
 
-write_tsv(sample_attributes_clean, "data/sample_attributes_clean.tsv")
+write_tsv(sample_attributes_clean, "data/02_sample_attributes_clean.tsv")
   
 # Reading gene counts ----------------------------------------------------------
 # We can use dataset with n_max or by loading the entire thing, 
 # subsetting the columns, and saving it again to then load it.
-gene_counts <- read_tsv("data/_raw/gene_reads.tsv", 
-                        skip = 2, lazy = TRUE) %>% 
+gene_reads <- read_tsv("data/_raw/gene_reads.tsv", 
+                        skip = 2, n_max = 20000, lazy = TRUE) %>% 
   select(Name, 
          Description, 
          pull(sample_attributes_clean, 
               sample_id)
   )
 
-write_tsv(gene_counts, "data/gene_reads_tissue.tsv")
+write_tsv(gene_reads, "data/02_gene_reads_tissue.tsv")
 
 # Remove the original tibble due to the size of the file -----------------------
 rm(gene_counts)
 gc()
 
 # Cleaning gene counts ---------------------------------------------------------
-gene_counts_clean <- read_tsv("data/gene_reads_tissue.tsv") %>% 
+gene_counts_clean <- read_tsv("data/02_gene_reads_tissue.tsv") %>% 
   rename(gencode_id = Name, 
          gene_symbol = Description) %>% 
   mutate(sum_counts = rowSums(
@@ -94,5 +94,5 @@ gene_counts_clean <- read_tsv("data/gene_reads_tissue.tsv") %>%
   filter(sum_counts > 10) %>% 
   select(-sum_counts)
 
-write_tsv(gene_counts_clean, "data/gene_reads_clean.tsv")
+write_tsv(gene_counts_clean, "data/02_gene_reads_clean.tsv")
 

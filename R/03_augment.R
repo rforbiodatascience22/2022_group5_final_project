@@ -7,15 +7,23 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-sample_attributes_clean <- read_tsv("data/sample_attributes_clean.tsv")
-subject_phenotypes_clean <- read_tsv(file = "data/subject_phenotypes_clean.tsv")
+sample_attributes_clean <- read_tsv("data/02_sample_attributes_clean.tsv")
+subject_phenotypes_clean <- read_tsv(file = "data/02_subject_phenotypes_clean.tsv")
+gene_reads_clean <- read_tsv(file = "data/02_gene_reads_clean.tsv")
 
 # Wrangle data ------------------------------------------------------------
 sample_attributes_clean_aug <- sample_attributes_clean %>% 
   inner_join(subject_phenotypes_clean, by="patient_id")
 
-View(sample_attributes_clean_aug)
+gene_reads_clean_aug <- gene_reads_clean %>%
+  select(gencode_id, 
+         gene_symbol, 
+         pull(sample_attributes_clean_aug, 
+              sample_id))
 
 # Write data --------------------------------------------------------------
-write_tsv(x = my_data_clean_aug,
-          file = "data/03_my_data_clean_aug.tsv")
+write_tsv(x = sample_attributes_clean_aug,
+          file = "data/03_sample_attributes_clean_aug.tsv")
+
+write_tsv(x = gene_reads_clean_aug,
+          file = "data/03_gene_reads_clean_aug.tsv")
