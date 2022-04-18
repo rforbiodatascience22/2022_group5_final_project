@@ -34,8 +34,8 @@ subject_phenotypes_clean <- subject_phenotypes %>%
 write_tsv(subject_phenotypes_clean, "data/02_subject_phenotypes_clean.tsv")
 
 # Clean sample attributes ------------------------------------------------------
-TISSUES_OF_INTEREST <- c("Lung")
-
+#TISSUES_OF_INTEREST <- c("Lung")
+#tissue %in% TISSUES_OF_INTEREST
 sample_attributes_clean <- sample_attributes %>% 
   select(SAMPID,
          SMPTHNTS,
@@ -58,8 +58,8 @@ sample_attributes_clean <- sample_attributes %>%
   filter(rin > 7 & 
            mapping_rate > 0.9 &
            rrna_rate < 0.15 & 
-           method == "RNASEQ" &
-           tissue %in% TISSUES_OF_INTEREST) %>% 
+           method == "RNASEQ" 
+           ) %>% 
   select(-method)
 
 write_tsv(sample_attributes_clean, "data/02_sample_attributes_clean.tsv")
