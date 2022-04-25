@@ -70,7 +70,6 @@ write_tsv(sample_attributes_clean, "data/02_sample_attributes_clean.tsv")
 gene_reads <- read_tsv("data/_raw/gene_reads.tsv", 
                         skip = 2, n_max = 20000, lazy = TRUE) %>% 
   select(Name, 
-         Description, 
          pull(sample_attributes_clean, 
               sample_id)
   )
@@ -83,8 +82,7 @@ gc()
 
 # Cleaning gene counts ---------------------------------------------------------
 gene_counts_clean <- read_tsv("data/02_gene_reads_tissue.tsv") %>% 
-  rename(gencode_id = Name, 
-         gene_symbol = Description) %>% 
+  rename(gencode_id = Name) %>% 
   mutate(sum_counts = rowSums(
     select(., 
            -gencode_id, 
