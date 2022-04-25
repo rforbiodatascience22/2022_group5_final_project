@@ -12,7 +12,7 @@ subject_phenotypes <- read_tsv(file = "data/_raw/SubjectPhenotypesDS.tsv")
 
 # Clean phenotypes -------------------------------------------------------------
 subject_phenotypes_clean <- subject_phenotypes %>% 
-  rename(patient_id = SUBJID,
+  dplyr::rename(patient_id = SUBJID,
          sex = SEX, 
          age = AGE, 
          death_severity = DTHHRDY) %>% 
@@ -42,7 +42,7 @@ sample_attributes_clean <- sample_attributes %>%
          SMTSD,
          SMMAPRT,
          SMRRNART) %>%
-  rename(sample_id = SAMPID,
+  dplyr::rename(sample_id = SAMPID,
          pathology_notes = SMPTHNTS,
          rin = SMRIN,
          method = SMAFRZE,
@@ -66,7 +66,7 @@ write_tsv(sample_attributes_clean, "data/02_sample_attributes_clean.tsv")
 # We can use dataset with n_max or by loading the entire thing, 
 # subsetting the columns, and saving it again to then load it.
 gene_reads <- read_tsv("data/_raw/gene_reads.tsv", 
-                        skip = 2, n_max = 20000, lazy = TRUE) %>% 
+                        skip = 2, n_max = 100, lazy = TRUE) %>% 
   select(Name, 
          Description, 
          pull(sample_attributes_clean, 
@@ -81,7 +81,7 @@ gc()
 
 # Cleaning gene counts ---------------------------------------------------------
 gene_counts_clean <- read_tsv("data/02_gene_reads_tissue.tsv") %>% 
-  rename(gencode_id = Name, 
+  dplyr::rename(gencode_id = Name, 
          gene_symbol = Description) %>% 
   mutate(sum_counts = rowSums(
     select(., 
@@ -91,6 +91,7 @@ gene_counts_clean <- read_tsv("data/02_gene_reads_tissue.tsv") %>%
   ) %>% 
   filter(sum_counts > 10) %>% 
   select(-sum_counts)
+
 
 write_tsv(gene_counts_clean, "data/02_gene_reads_clean.tsv")
 
