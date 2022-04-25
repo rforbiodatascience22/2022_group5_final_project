@@ -18,6 +18,10 @@ sample_attributes_clean_aug_factor <- sample_attributes_clean_aug %>%
 gene_reads_clean_aug_sample_id <- gene_reads_clean_aug %>%
   select(-gencode_id, 
          -gene_symbol)
+# Changing the data to include only specific tissues
+#TISSUES_OF_INTEREST <- c("Lung")
+#tissue %in% TISSUES_OF_INTEREST
+
 
 
 # Model data
