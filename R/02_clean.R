@@ -66,7 +66,7 @@ write_tsv(sample_attributes_clean, "data/02_sample_attributes_clean.tsv")
 # We can use dataset with n_max or by loading the entire thing, 
 # subsetting the columns, and saving it again to then load it.
 gene_reads <- read_tsv("data/_raw/gene_reads.tsv", 
-                        skip = 2, n_max = 100, lazy = TRUE) %>% 
+                        skip = 2, n_max = 500, lazy = TRUE) %>% 
   select(Name, 
          Description, 
          pull(sample_attributes_clean, 
