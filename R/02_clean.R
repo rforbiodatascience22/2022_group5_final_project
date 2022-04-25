@@ -12,7 +12,7 @@ subject_phenotypes <- read_tsv(file = "data/_raw/SubjectPhenotypesDS.tsv")
 
 # Clean phenotypes -------------------------------------------------------------
 subject_phenotypes_clean <- subject_phenotypes %>% 
-  rename(patient_id = SUBJID,
+  dplyr::rename(patient_id = SUBJID,
          sex = SEX, 
          age = AGE, 
          death_severity = DTHHRDY) %>% 
@@ -42,7 +42,7 @@ sample_attributes_clean <- sample_attributes %>%
          SMTSD,
          SMMAPRT,
          SMRRNART) %>%
-  rename(sample_id = SAMPID,
+  dplyr::rename(sample_id = SAMPID,
          pathology_notes = SMPTHNTS,
          rin = SMRIN,
          method = SMAFRZE,
