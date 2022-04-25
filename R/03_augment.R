@@ -12,8 +12,10 @@ subject_phenotypes_clean <- read_tsv(file = "data/02_subject_phenotypes_clean.ts
 gene_reads_clean <- read_tsv(file = "data/02_gene_reads_clean.tsv")
 
 # Wrangle data ------------------------------------------------------------
-sample_attributes_clean_aug <- sample_attributes_clean %>% 
-  inner_join(subject_phenotypes_clean, by="patient_id")
+sample_attributes_clean_aug <- sample_attributes_clean %>%
+  inner_join(subject_phenotypes_clean, by="patient_id") %>% 
+  filter(sample_id %in% colnames(gene_reads_clean))
+
 
 gene_reads_clean_aug <- gene_reads_clean %>%
   select(gencode_id, 
