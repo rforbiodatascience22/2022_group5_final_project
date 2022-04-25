@@ -12,7 +12,7 @@ subject_phenotypes <- read_tsv(file = "data/_raw/SubjectPhenotypesDS.tsv")
 
 # Clean phenotypes -------------------------------------------------------------
 subject_phenotypes_clean <- subject_phenotypes %>% 
-  rename(patient_id = SUBJID,
+  dplyr::rename(patient_id = SUBJID,
          sex = SEX, 
          age = AGE, 
          death_severity = DTHHRDY) %>% 
@@ -34,8 +34,6 @@ subject_phenotypes_clean <- subject_phenotypes %>%
 write_tsv(subject_phenotypes_clean, "data/02_subject_phenotypes_clean.tsv")
 
 # Clean sample attributes ------------------------------------------------------
-#TISSUES_OF_INTEREST <- c("Lung")
-#tissue %in% TISSUES_OF_INTEREST
 sample_attributes_clean <- sample_attributes %>% 
   select(SAMPID,
          SMPTHNTS,
@@ -44,7 +42,7 @@ sample_attributes_clean <- sample_attributes %>%
          SMTSD,
          SMMAPRT,
          SMRRNART) %>%
-  rename(sample_id = SAMPID,
+  dplyr::rename(sample_id = SAMPID,
          pathology_notes = SMPTHNTS,
          rin = SMRIN,
          method = SMAFRZE,
@@ -69,7 +67,7 @@ write_tsv(sample_attributes_clean, "data/02_sample_attributes_clean.tsv")
 # subsetting the columns, and saving it again to then load it.
 gene_reads <- read_tsv("data/_raw/gene_reads.tsv", 
                         skip = 2, n_max = 20000, lazy = TRUE) %>% 
-  select(Name, 
+  select(Name,
          pull(sample_attributes_clean, 
               sample_id)
   )
@@ -77,20 +75,21 @@ gene_reads <- read_tsv("data/_raw/gene_reads.tsv",
 write_tsv(gene_reads, "data/02_gene_reads_tissue.tsv")
 
 # Remove the original tibble due to the size of the file -----------------------
-rm(gene_counts)
-gc()
+#rm(gene_counts)
+#gc()
 
 # Cleaning gene counts ---------------------------------------------------------
 gene_counts_clean <- read_tsv("data/02_gene_reads_tissue.tsv") %>% 
   rename(gencode_id = Name) %>% 
   mutate(sum_counts = rowSums(
     select(., 
-           -gencode_id, 
-           -gene_symbol)
+           -gencode_id)
     )
   ) %>% 
   filter(sum_counts > 10) %>% 
-  select(-sum_counts)
+  select(-sum_counts) %>%  
+  pivot_longer(-gencode_id) %>% 
+  pivot_wider(names_from=gencode_id, values_from=value)
 
 write_tsv(gene_counts_clean, "data/02_gene_reads_clean.tsv")
 
