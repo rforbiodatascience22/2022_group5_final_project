@@ -35,28 +35,16 @@ dds <- DESeq(dds) # doing the deseq analysis
 
 resultsNames(dds) # lists the coefficients
 
-res <- results(dds, name="age_30.39_vs_20.29")
-rownames(res) <- gene_reads_clean_aug$gene_symbol
 
-resOrdered <- res[order(res$pvalue),]
-resOrdered <- as.data.frame(resOrdered) %>% 
-  mutate(significant = pvalue < 0.05)
+
 
 # Visualise data ----------------------------------------------------------
-resOrdered %>% 
-  drop_na(pvalue, 
-          log2FoldChange) %>%  
-  ggplot(mapping = aes(x = log2FoldChange,
-                     y = -log10(pvalue),
-                     color = significant)) +
-  theme_classic() +
-  geom_point(na.rm = TRUE) +
-  geom_hline(yintercept = -log10(0.05), 
-           linetype = "dashed",
-           color = "black") +
-  scale_color_manual(values = c("Black", "Red"))
+volcano_plot(dds, "age_30.39_vs_20.29")
+volcano_plot(dds, "age_40.49_vs_20.29")
 
-# Decide on Pvalue or Padj
+# Assign to variable and patch together :)
+
+# Decide on Pvalue or Padj in 99_project_functions
 
 # Write data --------------------------------------------------------------
 write_tsv(...)
