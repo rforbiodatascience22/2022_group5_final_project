@@ -12,7 +12,7 @@ subject_phenotypes_clean <- read_tsv(file = "data/02_subject_phenotypes_clean.ts
 gene_reads_clean <- read_tsv(file = "data/02_gene_reads_clean.tsv")
 
 # Wrangle data ------------------------------------------------------------
-tissue_of_interest <- "Lung"
+tissue_of_interest <- "Muscle - Skeletal"
 
 sample_attributes_clean_aug <- sample_attributes_clean %>%
   inner_join(subject_phenotypes_clean, by="patient_id") %>% 

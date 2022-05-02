@@ -5,6 +5,7 @@ library("tidyverse")
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
 
+options(timeout=100000)
 
 # Download data ---------------------------------------------------------------
 download.file(
