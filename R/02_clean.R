@@ -41,14 +41,16 @@ sample_attributes_clean <- sample_attributes %>%
          SMAFRZE,
          SMTSD,
          SMMAPRT,
-         SMRRNART) %>%
+         SMRRNART,
+         SMGEBTCHT) %>%
   dplyr::rename(sample_id = SAMPID,
          pathology_notes = SMPTHNTS,
          rin = SMRIN,
          method = SMAFRZE,
          tissue = SMTSD,
          mapping_rate = SMMAPRT,
-         rrna_rate = SMRRNART) %>% 
+         rrna_rate = SMRRNART,
+         technology = SMGEBTCHT) %>% 
   mutate(patient_id = substring(text = sample_id, 
                                 first = 1, 
                                 last = 10)) %>%
@@ -75,8 +77,8 @@ gene_reads <- read_tsv("data/_raw/gene_reads.tsv",
 write_tsv(gene_reads, "data/02_gene_reads_tissue.tsv")
 
 # Remove the original tibble due to the size of the file -----------------------
-#rm(gene_counts)
-#gc()
+rm(gene_reads)
+gc()
 
 # Cleaning gene counts ---------------------------------------------------------
 gene_counts_clean <- read_tsv("data/02_gene_reads_tissue.tsv") %>% 

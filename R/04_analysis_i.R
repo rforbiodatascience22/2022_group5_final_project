@@ -36,8 +36,6 @@ dds <- DESeq(dds) # doing the deseq analysis
 resultsNames(dds) # lists the coefficients
 
 
-
-
 # Visualise data ----------------------------------------------------------
 volcano_plot(dds, "age_30.39_vs_20.29")
 volcano_plot(dds, "age_40.49_vs_20.29")
