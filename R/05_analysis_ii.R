@@ -48,10 +48,7 @@ sample_attributes_clean_aug %>%
   ) +
   xlab("Age Group") +
   ylab("Count")
-
-
-
-
+ s
 # Write data --------------------------------------------------------------
 write_tsv(...)
 ggsave(...)
