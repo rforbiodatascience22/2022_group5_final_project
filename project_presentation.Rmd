@@ -1,5 +1,5 @@
 ---
-title: "GTex presentation"
+title: "Investigaion of Differential Expression based on gender in muscle tissue"
 author: "Astrid (s184248), Caroline (s183493), Christian (s165476), Frederik (s184260) and Nils (s220672)"
 
 output: 
@@ -13,7 +13,6 @@ date: '2022-05-09'
 ## Introduction
 
 
->-
 
 ## Material and Methods - Data
 
@@ -38,14 +37,13 @@ a flowchart should be here
 ## Challenges 
 
 
-## Results - Plot1
+## Results - PCA 
 
 
 
-## Results - Plot2
+## Results - Volcano Plot
 
-
-## Resutls - Plot3 
+## Resutls - Heatmap
 
 
 ## Summary
