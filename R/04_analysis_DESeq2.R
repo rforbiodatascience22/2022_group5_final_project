@@ -13,7 +13,8 @@ gene_reads_clean_aug <- read_tsv(file = "data/03_gene_reads_clean_aug.tsv")
 
 # Wrangle data ------------------------------------------------------------
 sample_attributes_clean_aug_factor <- sample_attributes_clean_aug %>% 
-  mutate(sex = factor(sex))  # change age to whatever you want to look at 
+  mutate(sex = factor(sex))
+
 
 gene_reads_clean_aug_sample_id <- gene_reads_clean_aug %>%  
   pivot_longer(-patient_id) %>% 
@@ -21,16 +22,12 @@ gene_reads_clean_aug_sample_id <- gene_reads_clean_aug %>%
               values_from = value) %>% 
   dplyr::rename(gencode_id = name) %>% 
   select(-gencode_id) 
-# Changing the data to include only specific tissues
-#TISSUES_OF_INTEREST <- c("Lung")
-#tissue %in% TISSUES_OF_INTEREST
-
 
 
 # Model data
 dds <- DESeqDataSetFromMatrix(countData = gene_reads_clean_aug_sample_id,
                               colData = sample_attributes_clean_aug_factor,
-                              design= ~ sex)  # Change age to whatever condition you want
+                              design= ~ sex)
 
 dds <- DESeq(dds) # doing the deseq analysis
 
