@@ -8,7 +8,7 @@ gene_reads_clean_aug <- read_tsv(file = "data/03_gene_reads_clean_aug.tsv")
 # Counting the different tissue types in the dataset
 counts_of_tissues <- sample_attributes_clean_aug %>% 
   dplyr::count(tissue)
-view(counts_of_tissues)
+# view(counts_of_tissues)
 
 # Filtering based on tissue type and creating the y variable
 sample_attributes_tissue <- sample_attributes_clean_aug %>% 
@@ -20,7 +20,6 @@ sample_attributes_tissue <- sample_attributes_clean_aug %>%
 
 
 gene_expression_data <- gene_reads_clean_aug %>% 
-  select(-gene_symbol) %>% 
   pivot_longer(-gencode_id) %>% 
   pivot_wider(names_from=gencode_id, values_from=value) %>% 
   dplyr::rename(sample_id = name) %>% 

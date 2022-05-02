@@ -28,21 +28,26 @@ gene_reads_clean_aug_sample_id <- gene_reads_clean_aug %>%
 dds <- DESeqDataSetFromMatrix(countData = gene_reads_clean_aug_sample_id,
                               colData = sample_attributes_clean_aug_factor,
                               design= ~ sex)
+head(dds)
 
-dds <- DESeq(dds) # doing the deseq analysis
+dds_analysis <- DESeq(dds) # doing the deseq analysis
 
-resultsNames(dds) # lists the coefficients
+resultsNames(dds_analysis) # lists the coefficients
 
-
-# Visualise data ----------------------------------------------------------
-volcano_plot <- results(dds, 
-        name = "sex_Male_vs_Female") %>% 
+sorted_padj <- results(dds_analysis, 
+                       name = "sex_Male_vs_Female") %>% 
   as.data.frame() %>% 
   mutate(Significance = case_when(
     padj <= 0.05 ~ "Significant",
     padj > 0.05 ~ "Not significant")) %>% 
   drop_na(padj, 
-          log2FoldChange) %>%  
+          log2FoldChange) %>% 
+  arrange(padj)
+
+head(sorted_padj)
+
+# Visualise data ----------------------------------------------------------
+volcano_plot <- sorted_padj %>% 
   ggplot(mapping = aes(x = log2FoldChange,
                        y = -log10(padj),
                        color = Significance)) +
@@ -55,7 +60,25 @@ volcano_plot <- results(dds,
   labs(title = "DESeq2: Male vs. female skeletal muscle gene expression") + 
   ylab("-log10(p_adjusted)")
 
+heatmap <- sorted_padj %>% 
+  top_n(n = 100) %>% 
+  ggplot(mapping = aes(x = sex,
+                       y = rownames,
+                       fill = log2FoldChange)) +
+  geom_tile(alpha = 0.5) + 
+  scale_fill_gradient2(high = "red", 
+                       mid = "white", 
+                       low = "blue", 
+                       midpoint = 1) +
+  theme_classic() +
+  theme(legend.position = "bottom") +
+  theme(axis.text.x = element_text(angle = 45, 
+                                   vjust = 1, 
+                                   hjust = 1, 
+                                   size = 6),
+        axis.text.y = element_text(size = 6))
 
+heatmap
 # Write data --------------------------------------------------------------
 #write_tsv(...)
 ggsave(filename = "deseq2_volcano_plot.png",
