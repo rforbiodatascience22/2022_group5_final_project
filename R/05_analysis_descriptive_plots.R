@@ -1,6 +1,7 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 library("ggplot2")
+library("patchwork")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -23,7 +24,7 @@ cause_of_death_bar_plot <- sample_attributes_clean_aug %>%
                                   "Ventilator case",
                                   "Violent fast death"), 
                        alpha = 0.5) +
-  labs(title = "Cause of death by sex", 
+  labs(title = "Cause of death by gender", 
        fill = "Death severity") +
   xlab("Sex") +
   ylab("Count") 
@@ -38,26 +39,20 @@ age_distribution_bar_plot <- sample_attributes_clean_aug %>%
   theme_classic() +
   scale_y_continuous(expand = c(0,0)) +
   scale_fill_viridis_d(alpha = 0.5) +
-  labs(title = "Age distribution grouped by sex", 
+  labs(title = "Age distribution grouped by gender", 
        fill = "Age") +
   xlab("Sex") +
   ylab("Count")
 
-# Write data --------------------------------------------------------------
-ggsave(filename = "cause_of_death_bar_plot.png",
-       plot = cause_of_death_bar_plot,
-       path = "results/",
-       scale = 1,
-       width = 10,
-       height = 6, 
-       units = "in",
-       dpi = 300)
+data_distributions <- cause_of_death_bar_plot / age_distribution_bar_plot
 
-ggsave(filename = "age_distribution_bar_plot.png",
-       plot = age_distribution_bar_plot,
+
+# Write data --------------------------------------------------------------
+ggsave(filename = "data_distributions.png",
+       plot = data_distributions,
        path = "results/",
        scale = 1,
-       width = 10,
-       height = 6, 
+       width = 5,
+       height = 5, 
        units = "in",
        dpi = 300)
