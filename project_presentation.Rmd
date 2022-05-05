@@ -4,7 +4,7 @@ author: "Astrid (s184248), Caroline (s183493), Christian (s165476), Frederik (s1
 
 output: 
     ioslides_presentation:
-      logo: results/DTU_logo-1.png 
+      logo: figures/DTU_logo-1.png 
     incremental: true
     self-included: true
 
@@ -67,7 +67,7 @@ knitr::include_graphics("results/data_distributions.png")
 
 <div style="float: right; width: 60%;">
 ```{r, echo=FALSE, out.height="30%"}
-knitr::include_graphics("results/workflow_clean.png")
+knitr::include_graphics("figures/workflow_clean.png")
 ```
 </div>
 
@@ -95,7 +95,7 @@ knitr::include_graphics("results/workflow_clean.png")
 
 <div style="float: right; width: 60%;">
 ```{r, echo=FALSE, out.height="30%"}
-knitr::include_graphics("results/workflow_aug.png")
+knitr::include_graphics("figures/workflow_aug.png")
 ```
 </div>
 ## Challenges 
