@@ -5,7 +5,7 @@ group number: 5
 
 output: 
     ioslides_presentation:
-      logo: figures/DTU_logo-1.png 
+      logo: ../figures/DTU_logo-1.png 
     incremental: true
     self-included: true
 
@@ -15,14 +15,17 @@ date: '2022-05-09'
 ## Introduction
 
 <div style="float: left; width: 40%;">
-<font size="3">In this project, we want to investigate whether or not there is a difference in gene expression between male and female muscle tissue. We will carry out the investigation based on data from the Genotype-Tissue Expression (GTEx) data base, which holds samples from deceased individuals who donated their bodies to science.
-
-We will focus on the expression of 20,000 genes. The individuals in the data set have died of various reasons (natural or illness-related) and their age span from 20 to 79 years old.</font>
+<font size="3">
+- Is there a difference in gene expression between male and female muscle tissue?
+  - Data from the Genotype-Tissue Expression (GTEx) data base.
+  - Focus on the expression of 20,000 genes. 
+  - Difference in cause of death and age (see figure).
+</font>
 </div>
 
 <div style="float: right; width: 60%;">
 ```{r, echo=FALSE, out.width="80%", out.height="50%"}
-knitr::include_graphics("results/data_distributions.png")
+knitr::include_graphics("../results/data_distributions.png")
 ```
 </div>
 
@@ -30,18 +33,23 @@ knitr::include_graphics("results/data_distributions.png")
 <font size="3"> 
 **File descriptions**
 
-- Three files from the GTex Portal (open source):
+- 3 files from GTex Portal (open source):
 
-  - Subject phenotype file: contains phenotype attributes of the subjects (Age and gender).
+  - Subject phenotype file: attributes of the subjects (Age and gender).
     
-  - Sample attribute file: contains data like sample ID, tissue type or RIN number.
+  - Sample attribute file: sample ID, tissue type, RIN number etc.
     
   - Gene counts file: Each row is a gene, each column is a sample from a patient. The cell value is the gene expression.
 
 **Description of analyses**
 
-- Principal Component Analysis: reduce data dimension from 20,000 to 2. Look for initial signs of data clustering. 
-- DESeq2: Calculate the log2fold change in gene expression between classes. In our case, between male and female muscle tissue gene expression.
+- Principal Component Analysis
+  - Reduce data dimension from 20,000 to 2
+  - Look for initial signs of data clustering
+  
+- DESeq2
+  - Calculate the log2fold change in gene expression between classes
+  - Classes: male and female
 </font>
 
 ## Material and Methods - Cleaning the data 
@@ -69,7 +77,7 @@ knitr::include_graphics("results/data_distributions.png")
 
 <div style="float: right; width: 60%;">
 ```{r, echo=FALSE, out.height="30%"}
-knitr::include_graphics("figures/workflow_clean.png")
+knitr::include_graphics("../figures/workflow_clean.png")
 ```
 </div>
 
@@ -93,19 +101,16 @@ knitr::include_graphics("figures/workflow_clean.png")
 
 - Gene reads: 524 x 500
 
-  -> there are 524 patients in the final data
+  -> There are 524 patients in the final data
     
 </font>
 </div>
 
 <div style="float: right; width: 60%;">
 ```{r, echo=FALSE, out.height="30%"}
-knitr::include_graphics("figures/workflow_aug.png")
+knitr::include_graphics("../figures/workflow_aug.png")
 ```
 </div>
-## Challenges 
-
-- Tidy data, with observations (patients) as rows and variables (genes) as columns, had to be trasnposed for the DESeq2 analysis. 
 
 ## Results - PCA 
 
@@ -114,7 +119,7 @@ knitr::include_graphics("figures/workflow_aug.png")
 ## Results - Volcano Plot
 
 ```{r, echo=FALSE, out.width="80%", out.height="50%"}
-knitr::include_graphics("results/deseq2_volcano_plot.png")
+knitr::include_graphics("../results/deseq2_volcano_plot.png")
 ```
 
 ## Results - Heatmap
@@ -122,7 +127,18 @@ knitr::include_graphics("results/deseq2_volcano_plot.png")
 
 ## Discussion
 
-All in all, we have seen indications that there is a difference in gene expression in muscle tissue in men and women. 
+- Variance between samples (Age and cause of death)
+  - We did not take this into account
+  - Therefore, results are likely not replicable with new data. 
+  
+- Project is reproducible
+  - Data and pipeline available on GitHub
 
-There was a lack of a control group in the data. 
+## Conclusion
+
+- PCA: blabla
+- DESeq2
+  - Volcano plot: Several genes are differentially expressed. 
+  - Heatmap: We did not see as clear a difference as we had expected, but there were some visible differences. 
+  
 
