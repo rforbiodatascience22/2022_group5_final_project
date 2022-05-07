@@ -30,7 +30,7 @@ date: '2022-05-09'
 
 <div style="float: right; width: 60%;">
 ```{r, echo=FALSE, out.width="80%", out.height="50%"}
-knitr::include_graphics("../results/data_distributions.png")
+knitr::include_graphics("../results/04_data_distributions.png")
 ```
 </div>
 
@@ -125,20 +125,20 @@ knitr::include_graphics("../figures/workflow_aug.png")
 ## Results - PCA 
 
 ```{r, echo=FALSE, out.width="90%", out.height="50%"}
-knitr::include_graphics("../results/pca_plots.png")
+knitr::include_graphics("../results/06_pca_plots.png")
 ```
 
 
 ## Results - Volcano Plot
 
 ```{r, echo=FALSE, out.width="90%", out.height="50%"}
-knitr::include_graphics("../results/deseq2_volcano_plot.png")
+knitr::include_graphics("../results/05_deseq2_volcano_plot.png")
 ```
 
 ## Results - Heatmap
 
 ```{r, echo=FALSE, out.width="90%", out.height="50%"}
-knitr::include_graphics("../results/heatmap.png")
+knitr::include_graphics("../results/05_heatmap.png")
 ```
 
 ## Discussion

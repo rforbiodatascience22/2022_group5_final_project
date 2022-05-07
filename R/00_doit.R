@@ -1,6 +1,7 @@
 # Make sure DESeq2 is installed
-if (!require("BiocManager", quietly = TRUE))
+if (!require("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
+}
 
 BiocManager::install("DESeq2")
 
