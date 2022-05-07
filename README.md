@@ -2,7 +2,7 @@
 
 General concept of this Repository:
 
-The repository gives you the opportunity to analyze differences in gene expression in muscle tissue between male and female subjects. The repository is structured in three main components, which are R, results, doc. Following them hierarchically gives you the understanding about the process of analyzing and presenting Bio Data. 
+The repository gives you the opportunity to analyze differences in gene expression in muscle tissue between male and female subjects. The repository is structured in three main components, which are R, results, doc. Following them hierarchically gives the user an understanding about the process of analyzing and presenting Bio Data. 
 
 Structure of Repository:
 
