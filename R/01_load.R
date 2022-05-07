@@ -1,13 +1,13 @@
-# Load libraries ----------------------------------------------------------
+# Load libraries ---------------------------------------------------------------
 library("tidyverse")
 
 
-# Define functions --------------------------------------------------------
+# Define functions -------------------------------------------------------------
 source(file = "R/99_project_functions.R")
 
 options(timeout=100000)
 
-# Download data ---------------------------------------------------------------
+# Download data ----------------------------------------------------------------
 download.file(
   url = "https://storage.googleapis.com/gtex_analysis_v8/annotations/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt",
   destfile = "data/_raw/SampleAttributesDS.tsv"
