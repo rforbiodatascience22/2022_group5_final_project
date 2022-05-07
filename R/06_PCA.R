@@ -171,36 +171,3 @@ ggsave(filename = "pca_plots.png",
        height = 6, 
        units = "in",
        dpi = 300)
-
-# 
-# set.seed(42)
-# abekat <- matrix_for_plots %>% 
-#   Rtsne(.,dims = 2,
-#         perplexity = 55,
-#         theta = 0,
-#         initial_dims = 500,
-#         max_iter = 10000)
-# 
-# TsneY <- as_tibble(abekat$Y)
-# 
-# colnames(TsneY) <- c("TSNE1",
-#                      "TSNE2")
-# TsneY_plot <- TsneY %>% 
-#   add_column(sex = pull(gene_reads_clean_aug_joined,
-#                         sex)
-#              ) %>% 
-#   ggplot(aes(x = TSNE1,
-#              y = TSNE2,
-#              color = sex)) + 
-#   geom_point(size = 1.5) + 
-#   theme_classic() + 
-#   labs(x = "TSNE1",
-#        y = "TSNE2") + 
-#   theme(legend.title = element_blank())
-# 
-# TsneY_plot
-# 
-# colnames(matrix_for_plots)
-# matrix_for_plots
-#   
-  
