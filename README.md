@@ -25,5 +25,5 @@ Structure of Repository:
 
 - in folder figures you can see the figures we created during our workflow for this project
 
-- you load the plots you create while running the code in the results folder
+- you will load the plots which you create while running the code in the results folder
 
