@@ -13,7 +13,8 @@ sample_attributes_clean_aug <- read_tsv(file = "data/03_sample_attributes_clean_
 # Cause of death grouped by sex
 cause_of_death_bar_plot <- sample_attributes_clean_aug %>%
   ggplot(mapping = aes(x = sex,
-        fill = death_severity)) + 
+        fill = death_severity)
+        ) + 
   geom_bar(position = "dodge",
            color = "black") +
   theme_classic() +
