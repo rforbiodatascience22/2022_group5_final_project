@@ -6,18 +6,18 @@ The repository gives you the opportunity to analyze differences in gene expressi
 
 Structure of Repository:
 
-- R folder contains the code where the first four files should be ran first to tidy the data which is necessary for the following files. In these files the user can create various visualization of the data to get an understanding about the 
+- R folder contains the code where the the raw data is tidied in the first four files on order to use the transformed data for each of the following analyzing tasks. 
 
-- in subfile 04 you can make a volcano plot to see how many genes are significantly different between the male and female patients (with p value = 0.05). After this, you choose 100 genes with the lowest p value in order to plot them against each other per patient on a heatmap where you differ between males and females.
-- in subfile 05 you can get get a feeling for the data where you can plot the cause of death by gender      and the age distribution based on gender within the data
+- in subfile 04 a volcano plot is made to visualize how many genes are significantly different between the male and female patients (with p value = 0.05). After this, 100 genes are with the lowest p value are chosen in order to plot them against each other per patient on a heatmap where you differ between males and females.
+- in subfile 05 the cause of death per gender and age distribution within the gender is plotted.
 
-- in subfile 06 (modelling_linear) we used a non linear model to try to see whether we can predict the      age of a patient based on the gene expression. This is an optional part of our work.
+- in subfile 06 (modelling_linear) a non linear model is built to discriminate the age of a patient based on the gene expression. This is an optional part of this work.
 
-- in subfile 07 you can use PCA to analyze whether you can use the difference in expression profile to distinguish between male and female muscle tissue
+- in subfile 07 PCA is carried to evaluate whether the difference in expression profile can be used to distinguish between male and female muscle tissue. 
 
-- in folder doc you can take a look at our presentation 
+- in folder doc the presentation is given
 
-- in folder figures you can see the figures we created during our workflow for this project
+- in folder figures the figures made within the plot pipeline are given.
 
 Data used:
 
