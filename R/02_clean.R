@@ -70,7 +70,7 @@ write_tsv(sample_attributes_clean,
 # subsetting the columns, and saving it again to then load it.
 gene_reads <- read_tsv("data/_raw/gene_reads.tsv", 
                         skip = 2,
-                        n_max = 500,
+                        n_max = 20000,
                         lazy = TRUE) %>% 
   select(Name,
          pull(sample_attributes_clean, 

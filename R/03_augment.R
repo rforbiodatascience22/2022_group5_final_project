@@ -19,6 +19,7 @@ sample_attributes_clean_aug <- sample_attributes_clean %>%
   filter(sample_id %in% colnames(gene_reads_clean),
          tissue == tissue_of_interest)
 
+# Transposing
 gene_reads_clean_aug <- gene_reads_clean %>%
   select(gencode_id,   
          pull(sample_attributes_clean_aug, 
