@@ -37,8 +37,11 @@ sorted_padj <- results(dds_analysis,
     padj <= 0.05 ~ "Significant",
     padj > 0.05 ~ "Not significant")) %>% 
   drop_na(padj, 
-          log2FoldChange) %>% 
-  arrange(padj)
+          log2FoldChange)
+
+sorted_padj100 <- sorted_padj %>% 
+  top_n(n = 100, 
+        wt = padj)
 
 head(sorted_padj)
 
@@ -57,23 +60,38 @@ volcano_plot <- sorted_padj %>%
   labs(title = "DESeq2: Male vs. female skeletal muscle gene expression") + 
   ylab("-log10(p_adjusted)")
 
-heatmap <- sorted_padj %>% 
-  top_n(n = 100) #%>% 
-  #ggplot(mapping = aes(x = sex,
-                       #y = rownames,
-                       #fill = log2FoldChange)) +
-  #geom_tile(alpha = 0.5) + 
-  #scale_fill_gradient2(high = "red", 
-                       #mid = "white", 
-                       #low = "blue", 
-                       #midpoint = 1) +
-  #theme_classic() +
-  #theme(legend.position = "bottom") +
-  #theme(axis.text.x = element_text(angle = 45, 
-                                  # vjust = 1, 
-                                   #hjust = 1, 
-                                   #size = 6),
-        #axis.text.y = element_text(size = 6))
+sorted_padj100 <- rownames_to_column(sorted_padj100, var = "gencode_id")
+
+heatmap <- gene_reads_clean_aug_sample_id %>% 
+    inner_join(sorted_padj100) %>% 
+   select(gencode_id, starts_with("GTEX")) %>% 
+  pivot_longer(-gencode_id) %>%
+  pivot_wider(names_from = gencode_id, 
+              values_from = value) %>%
+  dplyr::rename(sample_id = name) %>%
+  full_join(sample_attributes_clean_aug_factor %>%
+              select(sample_id,
+                     sex)) %>%
+  pivot_longer(cols = starts_with("ENS"),
+               names_to = "gencode_id",
+               values_to = "count") %>%
+  arrange(sex, count) %>% 
+  ggplot(mapping = aes(x = sample_id,
+                       y = gencode_id,
+                       fill = log10(count))) +
+  geom_tile(alpha = 0.5) +
+  scale_fill_gradient2(high = "red",
+                       mid = "white",
+                       low = "blue",
+                       midpoint = 2) +
+  theme_classic() +
+  theme(legend.position = "bottom") +
+  theme(axis.text.x = element_text(angle = 45,
+                                   vjust = 1,
+                                   hjust = 1,
+                                   size = 6),
+        axis.text.y = element_text(size = 6))
+
 
 heatmap
 # Write data --------------------------------------------------------------
