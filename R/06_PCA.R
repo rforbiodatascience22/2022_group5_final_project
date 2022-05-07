@@ -64,7 +64,8 @@ pca_regular <- pca_fit %>%
        y = pca_axis_text(pca_eigen, 2),
        title = "PCA of read counts") + 
   theme(legend.title = element_blank()) +
-  scale_fill_manual(values = c("#9C81A6","#80CBB5"))
+  scale_fill_manual(values = c("#9C81A6","#80CBB5")) +
+  theme(text = element_text(size = 15))
 
 
 # Principal component analysis on DeSeq - data object
@@ -98,10 +99,10 @@ rownames(dds) <- pull(gene_reads_clean_aug_sample_id,
 vsd <- varianceStabilizingTransformation(dds)
 normalized_counts <- as_tibble(assay(vsd))
 
-caro_astrid <- normalized_counts %>% 
-  add_column(gencode_id = pull(gene_reads_clean_aug_sample_id, 
-                               gencode_id)
-             )
+# normalized_counts <- normalized_counts %>% 
+#   add_column(gencode_id = pull(gene_reads_clean_aug_sample_id, 
+#                                gencode_id)
+#              )
 
 # Calculating mean absolute deviation and sorting by the top N genes
 top_N <- 5000
@@ -159,7 +160,8 @@ pca_normalized <- pr_comp_normalized %>%
   labs(x = pca_axis_text(pr_comp_eigen, 1),
        y = pca_axis_text(pr_comp_eigen, 2),
        title = "PCA of VST transformed read counts") + 
-  theme(legend.title = element_blank())
+  theme(legend.title = element_blank()) +
+  theme(text = element_text(size = 15))
   
 pca_plots <- pca_regular + pca_normalized
 

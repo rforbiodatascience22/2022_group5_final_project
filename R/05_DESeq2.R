@@ -41,11 +41,11 @@ sorted_padj <- results(dds_analysis,
           log2FoldChange) %>% 
   arrange(., padj)
 
-sorted_padj
+#sorted_padj
 sorted_padj100 <- sorted_padj %>% 
   head(10)
 
-head(sorted_padj100)
+#head(sorted_padj100)
 
 # Normalizing read-counts using Variance Stabilizing Transformation
 vsd <- varianceStabilizingTransformation(dds)
@@ -53,37 +53,42 @@ vsd <- varianceStabilizingTransformation(dds)
 normalized_counts <- assay(vsd)
 #normalized_counts <- DESeq2::counts(dds_analysis, normalized = TRUE)
 
-normalized_counts 
+#normalized_counts 
 
-caro_astrid <- as_tibble(normalized_counts) %>% 
+normalized_counts_tibble <- as_tibble(normalized_counts) %>% 
   add_column(median = rowMeans(normalized_counts)) %>% 
   mutate_at(vars(-matches("median")), ~ . - median) %>% 
   select(-median) %>% 
   add_column(gencode_id = pull(gene_reads_clean_aug_sample_id,gencode_id))
 
-caro_astrid
+#caro_astrid
 # Visualise data ----------------------------------------------------------
 volcano_plot <- sorted_padj %>% 
   ggplot(mapping = aes(x = log2FoldChange,
                        y = -log10(padj),
-                       color = Significance)) +
+                       color = Significance,
+                       fill = Significance)) +
   theme_classic() +
-  geom_point(na.rm = TRUE) +
+  geom_point(na.rm = TRUE, 
+             shape = 21, 
+             stroke = 0.2, 
+             color = "black") +
   geom_hline(yintercept = -log10(0.05), 
              linetype = "dashed",
              color = "black") +
-  scale_color_manual(values = c("Black", "#80cbb5")) + 
+  scale_fill_manual(values = c("Black", "#80cbb5")) + 
   labs(title = "DESeq2: Male vs. female skeletal muscle gene expression") + 
-  ylab("-log10(p_adjusted)")
+  ylab("-log10(p_adjusted)") +
+  theme(text = element_text(size = 20))
 
-volcano_plot
+#volcano_plot
 
 sorted_padj100 <- rownames_to_column(sorted_padj100, var = "gencode_id")
 
-sorted_padj100
+#sorted_padj100
 
 
-caro_astrid %>% 
+normalized_counts_tibble %>% 
   inner_join(sorted_padj100) %>% 
   select(gencode_id, starts_with("GTEX")) %>% 
   pivot_longer(-gencode_id) %>%
@@ -99,7 +104,7 @@ caro_astrid %>%
                        color = sex)) + 
   geom_point()
 
-heatmapdata <- caro_astrid %>% 
+heatmapdata <- normalized_counts_tibble %>% 
     inner_join(sorted_padj100) %>% 
    select(gencode_id, starts_with("GTEX")) %>% 
   pivot_longer(-gencode_id) %>%
@@ -118,10 +123,10 @@ heatmapdata <- caro_astrid %>%
                          list = count > 4, 
                          values = 4))
 
-heatmapdata
+#heatmapdata
 
 
-sorted_padj100
+#sorted_padj100
 
 #heatmapdata$sample_id[rev(sort(pull(sample_attributes_clean_aug_factor, sex)))=="Male"][length(heatmapdata$sample_id[rev(sort(pull(sample_attributes_clean_aug_factor, sex)))=="Male"])]
 
@@ -147,22 +152,24 @@ heatmap1 <-  heatmapdata %>%
                  "                     ", sep=""),
        x = "Gencode ID")
 
-heatmap1
+#heatmap1
 
 
-ggsave(filename = "fire.png",
-       plot = heatmap1,
+
+#head(heatmap)
+# Write data --------------------------------------------------------------
+#write_tsv(...)
+ggsave(filename = "deseq2_volcano_plot.png",
+       plot = volcano_plot,
        path = "results/",
        scale = 1,
        width = 10,
        height = 6, 
        units = "in",
        dpi = 300)
-head(heatmap)
-# Write data --------------------------------------------------------------
-#write_tsv(...)
-ggsave(filename = "deseq2_volcano_plot.png",
-       plot = volcano_plot,
+
+ggsave(filename = "heatmap.png",
+       plot = heatmap1,
        path = "results/",
        scale = 1,
        width = 10,
