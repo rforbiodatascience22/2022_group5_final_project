@@ -1,6 +1,6 @@
 library("DESeq2")
 library("tidyverse")
-library("Rtsne")
+library("patchwork")
 
 
 # Load data ---------------------------------------------------------------
@@ -40,16 +40,21 @@ pca_fit %>% broom::tidy(matrix = "eigenvalues") %>%
            alpha = 0.8)
   
 # Plotting the points projected onto the PC's
-pca_fit %>%
+pca_regular <- pca_fit %>%
   broom::augment(gene_reads_clean_aug_joined) %>% # add original dataset back in
   ggplot(aes(x = .fittedPC1,
              y = .fittedPC2,
-             color = sex)) + 
-  geom_point(size = 1.5) + 
+             color = sex,
+             fill = sex)) + 
+  geom_point(shape = 21, size = 1.5,
+             stroke = 0.2,
+             color = "black") + 
   theme_classic() + 
   labs(x = "PC1 (15 %)",
-       y = "PC2 (5%)") + 
-  theme(legend.title = element_blank())
+       y = "PC2 (5%)",
+       title = "PCA of read counts") + 
+  theme(legend.title = element_blank()) +
+  scale_fill_manual(values = c("#9C81A6","#80CBB5"))
 
 
 # Principal component analysis on DeSeq - data object
@@ -87,8 +92,6 @@ caro_astrid <- normalized_counts %>%
   add_column(gencode_id = pull(gene_reads_clean_aug_sample_id, 
                                gencode_id)
              )
-  
-
 
 # Calculating mean absolute deviation and sorting by the top N genes
 top_N <- 5000
@@ -127,47 +130,64 @@ pr_comp_normalized %>% broom::tidy(matrix = "eigenvalues") %>%
            alpha = 0.8)
 
 # Plotting the points projected onto the PC's
-pr_comp_normalized %>%
+pca_normalized <- pr_comp_normalized %>%
   broom::augment(gene_reads_clean_aug_joined) %>% # add original dataset back in
   ggplot(aes(x = .fittedPC1,
              y = .fittedPC2,
-             color = sex)
+             color = sex,
+             fill = sex)
          ) + 
-  geom_point(size = 1.5) + 
+  geom_point(size = 1.5, 
+             stroke =0.2,
+             color = "black",
+             shape = 21) + 
+  scale_fill_manual(values = c("#9C81A6","#80CBB5")) +
   theme_classic() + 
   labs(x = "PC1 (15 %)",
-       y = "PC2 (5%)") + 
+       y = "PC2 (5 %)",
+       title = "PCA of VST transformed read counts") + 
   theme(legend.title = element_blank())
   
+pca_plots <- pca_regular + pca_normalized
 
-set.seed(42)
-abekat <- matrix_for_plots %>% 
-  Rtsne(.,dims = 2,
-        perplexity = 55,
-        theta = 0,
-        initial_dims = 500,
-        max_iter = 10000)
+ggsave(filename = "pca_plots.png",
+       plot = pca_plots,
+       path = "results/",
+       scale = 1,
+       width = 10,
+       height = 6, 
+       units = "in",
+       dpi = 300)
 
-TsneY <- as_tibble(abekat$Y)
-
-colnames(TsneY) <- c("TSNE1",
-                     "TSNE2")
-TsneY_plot <- TsneY %>% 
-  add_column(sex = pull(gene_reads_clean_aug_joined,
-                        sex)
-             ) %>% 
-  ggplot(aes(x = TSNE1,
-             y = TSNE2,
-             color = sex)) + 
-  geom_point(size = 1.5) + 
-  theme_classic() + 
-  labs(x = "TSNE1",
-       y = "TSNE2") + 
-  theme(legend.title = element_blank())
-
-TsneY_plot
-
-colnames(matrix_for_plots)
-matrix_for_plots
-  
+# 
+# set.seed(42)
+# abekat <- matrix_for_plots %>% 
+#   Rtsne(.,dims = 2,
+#         perplexity = 55,
+#         theta = 0,
+#         initial_dims = 500,
+#         max_iter = 10000)
+# 
+# TsneY <- as_tibble(abekat$Y)
+# 
+# colnames(TsneY) <- c("TSNE1",
+#                      "TSNE2")
+# TsneY_plot <- TsneY %>% 
+#   add_column(sex = pull(gene_reads_clean_aug_joined,
+#                         sex)
+#              ) %>% 
+#   ggplot(aes(x = TSNE1,
+#              y = TSNE2,
+#              color = sex)) + 
+#   geom_point(size = 1.5) + 
+#   theme_classic() + 
+#   labs(x = "TSNE1",
+#        y = "TSNE2") + 
+#   theme(legend.title = element_blank())
+# 
+# TsneY_plot
+# 
+# colnames(matrix_for_plots)
+# matrix_for_plots
+#   
   
