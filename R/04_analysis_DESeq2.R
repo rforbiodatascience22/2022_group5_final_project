@@ -15,14 +15,15 @@ gene_reads_clean_aug <- read_tsv(file = "data/03_gene_reads_clean_aug.tsv")
 sample_attributes_clean_aug_factor <- sample_attributes_clean_aug %>% 
   mutate(sex = factor(sex))
 
-
 gene_reads_clean_aug_sample_id <- gene_reads_clean_aug %>%  
   pivot_longer(-patient_id) %>% 
   pivot_wider(names_from = patient_id, 
               values_from = value) %>% 
-  dplyr::rename(gencode_id = name) # Removed select(-gencode_id) to keep genenames, but this does not work now
+  dplyr::rename(gencode_id = name) %>%
+  select(-gencode_id)
 
 # Model data
+
 dds <- DESeqDataSetFromMatrix(countData = gene_reads_clean_aug_sample_id,
                               colData = sample_attributes_clean_aug_factor,
                               design= ~ sex)
