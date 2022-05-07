@@ -17,6 +17,8 @@ Handling of NAs:
 
 We dropped rows with NA values for gene counts in this analysis because you would not be able to fully compare the patients to each other if they contained missing values.
 
+The dataset:
+
 The data used to analyze gene expression was derived from the GTEX database, a database of RNA- and DNA-sequencing experiments of multiple tissue samples. A link to the raw data can be found below.
 
 https://www.gtexportal.org/home/datasets
