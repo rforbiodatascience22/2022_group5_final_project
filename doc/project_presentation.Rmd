@@ -1,6 +1,7 @@
 ---
 title: "Investigation of differential gene expression based on gender in muscle tissue"
-author: "Astrid (s184248), Caroline (s183493), Christian (s165476), Frederik (s184260) and Nils (s220672)"
+author: "Group 5: Astrid (s184248), Caroline (s183493), Christian (s165476), Frederik (s184260) and Nils (s220672)"
+group number: 5
 
 output: 
     ioslides_presentation:
@@ -49,19 +50,20 @@ knitr::include_graphics("results/data_distributions.png")
 <font size="3"> 
 **No. of rows x no. of columns before cleaning**
 
-- Subject phenotypes: XX x XX
+- Subject phenotypes: 980 x 4
 
-- Subject attributes: XX x XX
+- Sample attributes: 22951 x 63
 
-- Gene reads: XX x XX
+- Gene reads: 500 x 9112
 
 **No. of rows x no. of columns after cleaning**
 
-- Subject phenotypes: XX x XX
+- Subject phenotypes: 980 x 4
 
-- Subject attributes: XX x XX
+- Sample attributes: 9111 x 8
 
-- Gene reads: XX x XX
+- Gene reads: 499 x 9112
+
 </font>
 </div>
 
@@ -77,19 +79,22 @@ knitr::include_graphics("figures/workflow_clean.png")
 <font size="3"> 
 **No. of rows x no. of columns before cleaning**
 
-- Subject phenotypes: XX x XX
+- Subject phenotypes: 980 x 4
 
-- Subject attributes: XX x XX
+- Subject attributes: 22951 x 63
 
-- Gene reads: XX x XX
+- Gene reads: 500 x 9112
 
 **No. of rows x no. of columns after cleaning**
 
-- Subject phenotypes: XX x XX
+- Subject phenotypes: 980 x 4
 
-- Subject attributes: XX x XX
+- Sample attributes: 524 x 11
 
-- Gene reads: XX x XX
+- Gene reads: 524 x 500
+
+  -> there are 524 patients in the final data
+    
 </font>
 </div>
 
