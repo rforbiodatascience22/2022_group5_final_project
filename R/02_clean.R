@@ -31,7 +31,8 @@ subject_phenotypes_clean <- subject_phenotypes %>%
   ) 
   
 
-write_tsv(subject_phenotypes_clean, "data/02_subject_phenotypes_clean.tsv")
+write_tsv(subject_phenotypes_clean,
+          "data/02_subject_phenotypes_clean.tsv")
 
 # Clean sample attributes ------------------------------------------------------
 sample_attributes_clean <- sample_attributes %>% 
@@ -53,7 +54,8 @@ sample_attributes_clean <- sample_attributes %>%
          technology = SMGEBTCHT) %>% 
   mutate(patient_id = substring(text = sample_id, 
                                 first = 1, 
-                                last = 10)) %>%
+                                last = 10)
+         ) %>%
   relocate(patient_id) %>% 
   filter(rin > 7 & 
            mapping_rate > 0.9 &
