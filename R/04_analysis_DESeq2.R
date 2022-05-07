@@ -12,7 +12,8 @@ gene_reads_clean_aug <- read_tsv(file = "data/03_gene_reads_clean_aug.tsv")
 
 # Wrangle data ------------------------------------------------------------
 sample_attributes_clean_aug_factor <- sample_attributes_clean_aug %>% 
-  mutate(sex = factor(sex))
+  mutate(sex = factor(sex),
+         sample_id = factor(sample_id))
 
 gene_reads_clean_aug_sample_id <- gene_reads_clean_aug %>%  
   pivot_longer(-patient_id) %>% 
@@ -45,6 +46,15 @@ sorted_padj100 <- sorted_padj %>%
 
 head(sorted_padj)
 
+# Normalizing read-counts using Variance Stabilizing Transformation
+vsd <- varianceStabilizingTransformation(dds)
+
+normalized_counts <- as_tibble(assay(vsd))
+
+normalized_counts
+
+caro_astrid <- normalized_counts %>% 
+  add_column(gencode_id = pull(gene_reads_clean_aug_sample_id,gencode_id))
 
 # Visualise data ----------------------------------------------------------
 volcano_plot <- sorted_padj %>% 
@@ -62,7 +72,7 @@ volcano_plot <- sorted_padj %>%
 
 sorted_padj100 <- rownames_to_column(sorted_padj100, var = "gencode_id")
 
-heatmap <- gene_reads_clean_aug_sample_id %>% 
+heatmapdata <- caro_astrid %>% 
     inner_join(sorted_padj100) %>% 
    select(gencode_id, starts_with("GTEX")) %>% 
   pivot_longer(-gencode_id) %>%
@@ -74,16 +84,22 @@ heatmap <- gene_reads_clean_aug_sample_id %>%
                      sex)) %>%
   pivot_longer(cols = starts_with("ENS"),
                names_to = "gencode_id",
-               values_to = "count") %>%
-  arrange(sex, count) %>% 
-  ggplot(mapping = aes(x = sample_id,
-                       y = gencode_id,
-                       fill = log10(count))) +
+               values_to = "count") %>% 
+  mutate(sample_id = fct_reorder(factor(sample_id), sex == "Male"))
+
+heatmapdata
+
+slice_1_gene <- slice_head(heatmapdata, n=524)
+  
+heatmap1 <-  heatmapdata %>%
+  ggplot(mapping = aes(x = gencode_id,
+                       y = sample_id,
+                       fill = count)) +
   geom_tile(alpha = 0.5) +
   scale_fill_gradient2(high = "red",
                        mid = "white",
                        low = "blue",
-                       midpoint = 2) +
+                       midpoint = 0.7) +
   theme_classic() +
   theme(legend.position = "bottom") +
   theme(axis.text.x = element_text(angle = 45,
@@ -92,8 +108,18 @@ heatmap <- gene_reads_clean_aug_sample_id %>%
                                    size = 6),
         axis.text.y = element_text(size = 6))
 
+heatmap1
 
-heatmap
+
+ggsave(filename = "fire.png",
+       plot = heatmap1,
+       path = "results/",
+       scale = 1,
+       width = 10,
+       height = 6, 
+       units = "in",
+       dpi = 300)
+head(heatmap)
 # Write data --------------------------------------------------------------
 #write_tsv(...)
 ggsave(filename = "deseq2_volcano_plot.png",
