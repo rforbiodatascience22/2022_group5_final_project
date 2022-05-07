@@ -2,6 +2,13 @@ library("DESeq2")
 library("tidyverse")
 library("patchwork")
 
+pca_axis_text <- function(eigen_object, axis_num) {
+  pc_decimal <- eigen_object %>% 
+    pull(., percent) %>% 
+    pluck(., axis_num)
+  pc = round(pc_decimal * 100, digits=1)
+  paste("PC", axis_num," (", pc, "%)", sep="")
+}
 
 # Load data ---------------------------------------------------------------
 sample_attributes_clean_aug <- read_tsv(file = "data/03_sample_attributes_clean_aug.tsv")
@@ -29,10 +36,13 @@ pca_fit <- gene_reads_clean_aug_joined %>%
   
 
 # Plotting variance explained
-pca_fit %>% broom::tidy(matrix = "eigenvalues") %>%
+pca_eigen <- pca_fit %>% 
+  broom::tidy(matrix = "eigenvalues") %>%
   top_n(., 
         n = 50,
-        wt = percent) %>% 
+        wt = percent)
+
+pca_eigen %>% 
   ggplot(aes(x = PC,
              y = percent)
          ) +
@@ -50,8 +60,8 @@ pca_regular <- pca_fit %>%
              stroke = 0.2,
              color = "black") + 
   theme_classic() + 
-  labs(x = "PC1 (15 %)",
-       y = "PC2 (5%)",
+  labs(x = pca_axis_text(pca_eigen, 1),
+       y = pca_axis_text(pca_eigen, 2),
        title = "PCA of read counts") + 
   theme(legend.title = element_blank()) +
   scale_fill_manual(values = c("#9C81A6","#80CBB5"))
@@ -120,14 +130,17 @@ pr_comp_normalized <- matrix_for_plots %>%
   prcomp(scale=TRUE)
 
 # Plotting variance explained
-pr_comp_normalized %>% broom::tidy(matrix = "eigenvalues") %>%
+pr_comp_eigen <- pr_comp_normalized %>% broom::tidy(matrix = "eigenvalues") %>%
   top_n(., 
         n = 50, 
-        wt = percent) %>% 
+        wt = percent) 
+
+pr_comp_eigen %>% 
   ggplot(aes(x = PC,
              y = percent)) +
   geom_col(fill = "#56B4E9",
            alpha = 0.8)
+
 
 # Plotting the points projected onto the PC's
 pca_normalized <- pr_comp_normalized %>%
@@ -138,13 +151,13 @@ pca_normalized <- pr_comp_normalized %>%
              fill = sex)
          ) + 
   geom_point(size = 1.5, 
-             stroke =0.2,
+             stroke = 0.2,
              color = "black",
              shape = 21) + 
   scale_fill_manual(values = c("#9C81A6","#80CBB5")) +
   theme_classic() + 
-  labs(x = "PC1 (15 %)",
-       y = "PC2 (5 %)",
+  labs(x = pca_axis_text(pr_comp_eigen, 1),
+       y = pca_axis_text(pr_comp_eigen, 2),
        title = "PCA of VST transformed read counts") + 
   theme(legend.title = element_blank())
   
