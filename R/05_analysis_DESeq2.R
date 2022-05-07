@@ -38,24 +38,30 @@ sorted_padj <- results(dds_analysis,
     padj <= 0.05 ~ "Significant",
     padj > 0.05 ~ "Not significant")) %>% 
   drop_na(padj, 
-          log2FoldChange)
+          log2FoldChange) %>% 
+  arrange(., padj)
 
+sorted_padj
 sorted_padj100 <- sorted_padj %>% 
-  top_n(n = 100, 
-        wt = padj)
+  head(10)
 
-head(sorted_padj)
+head(sorted_padj100)
 
 # Normalizing read-counts using Variance Stabilizing Transformation
 vsd <- varianceStabilizingTransformation(dds)
 
-normalized_counts <- as_tibble(assay(vsd))
+normalized_counts <- assay(vsd)
+#normalized_counts <- DESeq2::counts(dds_analysis, normalized = TRUE)
 
-normalized_counts
+normalized_counts 
 
-caro_astrid <- normalized_counts %>% 
+caro_astrid <- as_tibble(normalized_counts) %>% 
+  add_column(median = rowMeans(normalized_counts)) %>% 
+  mutate_at(vars(-matches("median")), ~ . - median) %>% 
+  select(-median) %>% 
   add_column(gencode_id = pull(gene_reads_clean_aug_sample_id,gencode_id))
 
+caro_astrid
 # Visualise data ----------------------------------------------------------
 volcano_plot <- sorted_padj %>% 
   ggplot(mapping = aes(x = log2FoldChange,
@@ -70,7 +76,28 @@ volcano_plot <- sorted_padj %>%
   labs(title = "DESeq2: Male vs. female skeletal muscle gene expression") + 
   ylab("-log10(p_adjusted)")
 
+volcano_plot
+
 sorted_padj100 <- rownames_to_column(sorted_padj100, var = "gencode_id")
+
+sorted_padj100
+
+
+caro_astrid %>% 
+  inner_join(sorted_padj100) %>% 
+  select(gencode_id, starts_with("GTEX")) %>% 
+  pivot_longer(-gencode_id) %>%
+  pivot_wider(names_from = gencode_id, 
+              values_from = value) %>%
+  dplyr::rename(sample_id = name) %>%
+  full_join(sample_attributes_clean_aug_factor %>%
+              select(sample_id,
+                     sex)) %>% 
+  select(c("ENSG00000168785.7", sex)) %>% 
+  ggplot(mapping = aes(x = ENSG00000168785.7, 
+                       y = sex, 
+                       color = sex)) + 
+  geom_point()
 
 heatmapdata <- caro_astrid %>% 
     inner_join(sorted_padj100) %>% 
@@ -85,28 +112,40 @@ heatmapdata <- caro_astrid %>%
   pivot_longer(cols = starts_with("ENS"),
                names_to = "gencode_id",
                values_to = "count") %>% 
-  mutate(sample_id = fct_reorder(factor(sample_id), sex == "Male"))
+  mutate(sample_id = fct_reorder(factor(sample_id), sex == "Male"),
+         gencode_id = factor(gencode_id, levels = pull(sorted_padj100, gencode_id)),
+         count = replace(x = count, 
+                         list = count > 4, 
+                         values = 4))
 
 heatmapdata
 
-slice_1_gene <- slice_head(heatmapdata, n=524)
-  
+
+sorted_padj100
+
+#heatmapdata$sample_id[rev(sort(pull(sample_attributes_clean_aug_factor, sex)))=="Male"][length(heatmapdata$sample_id[rev(sort(pull(sample_attributes_clean_aug_factor, sex)))=="Male"])]
+
+#"#2C0146"
 heatmap1 <-  heatmapdata %>%
   ggplot(mapping = aes(x = gencode_id,
                        y = sample_id,
-                       fill = count)) +
-  geom_tile(alpha = 0.5) +
-  scale_fill_gradient2(high = "red",
-                       mid = "white",
-                       low = "blue",
-                       midpoint = 0.7) +
+                       fill = count)) + 
+  geom_tile(alpha = 1) +
+  geom_hline(yintercept = "GTEX-1R9JW-2426-SM-DTXFI") + 
+  scale_fill_gradient2(high = "red", mid="white", low="#4C2166") +
   theme_classic() +
-  theme(legend.position = "bottom") +
+  theme(legend.position = "bottom", legend.direction = "horizontal") +
   theme(axis.text.x = element_text(angle = 45,
                                    vjust = 1,
                                    hjust = 1,
-                                   size = 6),
-        axis.text.y = element_text(size = 6))
+                                   size = 8),
+        axis.text.y = element_blank()) +
+  labs(fill = "Deviation from median VST\n", 
+       y = paste("Patients\nFemale",
+                 "                                ",
+                 "Male",
+                 "                     ", sep=""),
+       x = "Gencode ID")
 
 heatmap1
 
