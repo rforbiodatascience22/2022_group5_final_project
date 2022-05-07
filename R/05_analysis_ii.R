@@ -7,7 +7,8 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-sample_attributes_clean_aug <- read_tsv(file = "data/03_sample_attributes_clean_aug.tsv")
+sample_attributes_clean_aug <- read_tsv(
+  file = "data/03_sample_attributes_clean_aug.tsv")
 
 
 # Wrangle data ------------------------------------------------------------
