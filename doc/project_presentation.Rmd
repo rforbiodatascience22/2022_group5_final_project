@@ -124,16 +124,22 @@ knitr::include_graphics("../figures/workflow_aug.png")
 
 ## Results - PCA 
 
+```{r, echo=FALSE, out.width="90%", out.height="50%"}
+knitr::include_graphics("../results/pca_plots.png")
+```
 
 
 ## Results - Volcano Plot
 
-```{r, echo=FALSE, out.width="80%", out.height="50%"}
+```{r, echo=FALSE, out.width="90%", out.height="50%"}
 knitr::include_graphics("../results/deseq2_volcano_plot.png")
 ```
 
 ## Results - Heatmap
 
+```{r, echo=FALSE, out.width="90%", out.height="50%"}
+knitr::include_graphics("../results/heatmap.png")
+```
 
 ## Discussion
 <font size="3">
