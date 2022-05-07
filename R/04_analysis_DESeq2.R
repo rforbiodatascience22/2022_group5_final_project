@@ -6,7 +6,6 @@ library("DESeq2")
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
 
-
 # Load data ---------------------------------------------------------------
 sample_attributes_clean_aug <- read_tsv(file = "data/03_sample_attributes_clean_aug.tsv")
 gene_reads_clean_aug <- read_tsv(file = "data/03_gene_reads_clean_aug.tsv")
@@ -19,19 +18,18 @@ gene_reads_clean_aug_sample_id <- gene_reads_clean_aug %>%
   pivot_longer(-patient_id) %>% 
   pivot_wider(names_from = patient_id, 
               values_from = value) %>% 
-  dplyr::rename(gencode_id = name) %>%
-  select(-gencode_id)
+  dplyr::rename(gencode_id = name)
+
 
 # Model data
-
-dds <- DESeqDataSetFromMatrix(countData = gene_reads_clean_aug_sample_id,
+dds <- DESeqDataSetFromMatrix(countData = select(gene_reads_clean_aug_sample_id,-gencode_id),
                               colData = sample_attributes_clean_aug_factor,
                               design= ~ sex)
+rownames(dds) <- gene_reads_clean_aug_sample_id %>% pull(gencode_id)
 
 dds_analysis <- DESeq(dds) # doing the deseq analysis
 
 resultsNames(dds_analysis) # lists the coefficients
-
 sorted_padj <- results(dds_analysis, 
                        name = "sex_Male_vs_Female") %>% 
   as.data.frame() %>% 
