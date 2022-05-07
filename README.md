@@ -29,8 +29,7 @@ GTEx_Analysis_2017-0605_v8_RNASeQCv1.1.9_gene_reads.gct.gz contains one column p
 
 Handling of NAs:
 
-We dropped rows with NA values for gene counts in this analysis because you would not be able to fully compare the patients to each other if they contained missing values. 
-
+We dropped rows with NA values for gene counts in this analysis because you would not be able to fully compare the patients to each other if they contained missing values
 
 
 
