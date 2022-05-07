@@ -1,0 +1,123 @@
+---
+title: "Investigation of differential gene expression based on gender in muscle tissue"
+author: "Astrid (s184248), Caroline (s183493), Christian (s165476), Frederik (s184260) and Nils (s220672)"
+
+output: 
+    ioslides_presentation:
+      logo: figures/DTU_logo-1.png 
+    incremental: true
+    self-included: true
+
+date: '2022-05-09'
+---
+
+## Introduction
+
+<div style="float: left; width: 40%;">
+<font size="3">In this project, we want to investigate whether or not there is a difference in gene expression between male and female muscle tissue. We will carry out the investigation based on data from the Genotype-Tissue Expression (GTEx) data base, which holds samples from deceased individuals who donated their bodies to science.
+
+We will focus on the expression of 20,000 genes. The individuals in the data set have died of various reasons (natural or illness-related) and their age span from 20 to 79 years old.</font>
+</div>
+
+<div style="float: right; width: 60%;">
+```{r, echo=FALSE, out.width="80%", out.height="50%"}
+knitr::include_graphics("results/data_distributions.png")
+```
+</div>
+
+## Material and Methods: Data files and analyses
+<font size="3"> 
+**File descriptions**
+
+- Three files from the GTex Portal (open source):
+
+  - Subject phenotype file: contains phenotype attributes of the subjects (Age and gender).
+    
+  - Sample attribute file: contains data like sample ID, tissue type or RIN number.
+    
+  - Gene counts file: Each row is a gene, each column is a sample from a patient. The cell value is the gene expression.
+
+**Description of analyses**
+
+- Principal Component Analysis: reduce data dimension from 20,000 to 2. Look for initial signs of data clustering. 
+- DESeq2: Calculate the log2fold change in gene expression between classes. In our case, between male and female muscle tissue gene expression.
+</font>
+
+## Material and Methods - Cleaning the data 
+
+<div style="float: left; width: 40%;">
+<font size="3"> 
+**No. of rows x no. of columns before cleaning**
+
+- Subject phenotypes: XX x XX
+
+- Subject attributes: XX x XX
+
+- Gene reads: XX x XX
+
+**No. of rows x no. of columns after cleaning**
+
+- Subject phenotypes: XX x XX
+
+- Subject attributes: XX x XX
+
+- Gene reads: XX x XX
+</font>
+</div>
+
+<div style="float: right; width: 60%;">
+```{r, echo=FALSE, out.height="30%"}
+knitr::include_graphics("figures/workflow_clean.png")
+```
+</div>
+
+## Material and Methods - Augmentation
+
+<div style="float: left; width: 40%;">
+<font size="3"> 
+**No. of rows x no. of columns before cleaning**
+
+- Subject phenotypes: XX x XX
+
+- Subject attributes: XX x XX
+
+- Gene reads: XX x XX
+
+**No. of rows x no. of columns after cleaning**
+
+- Subject phenotypes: XX x XX
+
+- Subject attributes: XX x XX
+
+- Gene reads: XX x XX
+</font>
+</div>
+
+<div style="float: right; width: 60%;">
+```{r, echo=FALSE, out.height="30%"}
+knitr::include_graphics("figures/workflow_aug.png")
+```
+</div>
+## Challenges 
+
+- Tidy data, with observations (patients) as rows and variables (genes) as columns, had to be trasnposed for the DESeq2 analysis. 
+
+## Results - PCA 
+
+
+
+## Results - Volcano Plot
+
+```{r, echo=FALSE, out.width="80%", out.height="50%"}
+knitr::include_graphics("results/deseq2_volcano_plot.png")
+```
+
+## Results - Heatmap
+
+
+## Discussion
+
+All in all, we have seen indications that there is a difference in gene expression in muscle tissue in men and women. 
+
+There was a lack of a control group in the data. 
+

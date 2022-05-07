@@ -15,20 +15,18 @@ gene_reads_clean_aug <- read_tsv(file = "data/03_gene_reads_clean_aug.tsv")
 sample_attributes_clean_aug_factor <- sample_attributes_clean_aug %>% 
   mutate(sex = factor(sex))
 
-
 gene_reads_clean_aug_sample_id <- gene_reads_clean_aug %>%  
   pivot_longer(-patient_id) %>% 
   pivot_wider(names_from = patient_id, 
               values_from = value) %>% 
-  dplyr::rename(gencode_id = name) %>% 
-  select(-gencode_id) 
-
+  dplyr::rename(gencode_id = name) %>%
+  select(-gencode_id)
 
 # Model data
+
 dds <- DESeqDataSetFromMatrix(countData = gene_reads_clean_aug_sample_id,
                               colData = sample_attributes_clean_aug_factor,
                               design= ~ sex)
-head(dds)
 
 dds_analysis <- DESeq(dds) # doing the deseq analysis
 
@@ -46,6 +44,7 @@ sorted_padj <- results(dds_analysis,
 
 head(sorted_padj)
 
+
 # Visualise data ----------------------------------------------------------
 volcano_plot <- sorted_padj %>% 
   ggplot(mapping = aes(x = log2FoldChange,
@@ -56,27 +55,27 @@ volcano_plot <- sorted_padj %>%
   geom_hline(yintercept = -log10(0.05), 
              linetype = "dashed",
              color = "black") +
-  scale_color_manual(values = c("Black", "Red")) + 
+  scale_color_manual(values = c("Black", "#80cbb5")) + 
   labs(title = "DESeq2: Male vs. female skeletal muscle gene expression") + 
   ylab("-log10(p_adjusted)")
 
 heatmap <- sorted_padj %>% 
-  top_n(n = 100) %>% 
-  ggplot(mapping = aes(x = sex,
-                       y = rownames,
-                       fill = log2FoldChange)) +
-  geom_tile(alpha = 0.5) + 
-  scale_fill_gradient2(high = "red", 
-                       mid = "white", 
-                       low = "blue", 
-                       midpoint = 1) +
-  theme_classic() +
-  theme(legend.position = "bottom") +
-  theme(axis.text.x = element_text(angle = 45, 
-                                   vjust = 1, 
-                                   hjust = 1, 
-                                   size = 6),
-        axis.text.y = element_text(size = 6))
+  top_n(n = 100) #%>% 
+  #ggplot(mapping = aes(x = sex,
+                       #y = rownames,
+                       #fill = log2FoldChange)) +
+  #geom_tile(alpha = 0.5) + 
+  #scale_fill_gradient2(high = "red", 
+                       #mid = "white", 
+                       #low = "blue", 
+                       #midpoint = 1) +
+  #theme_classic() +
+  #theme(legend.position = "bottom") +
+  #theme(axis.text.x = element_text(angle = 45, 
+                                  # vjust = 1, 
+                                   #hjust = 1, 
+                                   #size = 6),
+        #axis.text.y = element_text(size = 6))
 
 heatmap
 # Write data --------------------------------------------------------------
