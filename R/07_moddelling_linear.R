@@ -1,7 +1,8 @@
 library("tidyverse")
 
 # Load data ---------------------------------------------------------------
-sample_attributes_clean_aug <- read_tsv(file = "data/03_sample_attributes_clean_aug.tsv")
+sample_attributes_clean_aug <- read_tsv(
+  file = "data/03_sample_attributes_clean_aug.tsv")
 gene_reads_clean_aug <- read_tsv(file = "data/03_gene_reads_clean_aug.tsv")
 
 # Filter for tissue type
@@ -26,8 +27,7 @@ gene_expression_data <- gene_reads_clean_aug %>%
               values_from = value) %>% 
   dplyr::rename(sample_id = name) %>% 
   filter(sample_id %in% pull(sample_attributes_tissue,
-                             sample_id)
-         ) %>% 
+                             sample_id)) %>% 
   inner_join(sample_attributes_tissue, 
              by = "sample_id") %>% 
   select(-sample_id)
@@ -90,11 +90,12 @@ expression_data_model_tidy %>%
   theme_classic() + 
   theme(axis.text.x = element_text(angle = 90,
                                    vjust = 0.5,
-                                   hjust=1),
+                                   hjust = 1),
         axis.title = element_text(size = 20),
         legend.text = element_text(size = 20),
         legend.title = element_text(size = 20)) + 
-  labs(x = "Genes", y = "Minus log10(p-value)")
+  labs(x = "Genes",
+       y = "Minus log10(p-value)")
 
 
 # Plotting the effect (coeffecients of linear model) of the 

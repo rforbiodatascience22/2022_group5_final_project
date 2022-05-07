@@ -7,7 +7,8 @@ library("patchwork")
 source(file = "R/99_project_functions.R")
 
 # Load data ---------------------------------------------------------------
-sample_attributes_clean_aug <- read_tsv(file = "data/03_sample_attributes_clean_aug.tsv")
+sample_attributes_clean_aug <- read_tsv(
+  file = "data/03_sample_attributes_clean_aug.tsv")
 
 # Visualise data ----------------------------------------------------------
 # Cause of death grouped by sex
@@ -18,7 +19,7 @@ cause_of_death_bar_plot <- sample_attributes_clean_aug %>%
   geom_bar(position = "dodge",
            color = "black") +
   theme_classic() +
-  scale_y_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0, 0)) +
   scale_fill_viridis_d(labels = c("Intermediate death",
                                   "Natural fast death", 
                                   "Slow death",
@@ -38,7 +39,7 @@ age_distribution_bar_plot <- sample_attributes_clean_aug %>%
   geom_bar(position = "dodge",
            color = "black") +
   theme_classic() +
-  scale_y_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0, 0)) +
   scale_fill_viridis_d(alpha = 0.5) +
   labs(title = "Age distribution grouped by gender", 
        fill = "Age") +
