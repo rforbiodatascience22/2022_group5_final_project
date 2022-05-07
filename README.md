@@ -1,36 +1,32 @@
 # 2022_group5_final_project
 
 General concept of this Repository:
+This repository analyses differences in RNA gene expression data from muscle tissue between male and female subjects retrieved from the GTEX database. The contents of the repository are separated into three main directories: R, results, and doc containing the scripts, our results, and the documentation, respectively. Furthermore, the gene expression analysis pipeline follows the order of data loading, cleaning, augmenting, and analysis, also indicated by the script names. 
 
-The repository gives you the opportunity to analyze differences in gene expression in muscle tissue between male and female subjects. The repository is structured in three main components, which are R, results, doc. Following them hierarchically gives the user an understanding about the process of analyzing and presenting Bio Data. 
+Below a short description of each R-script can be seen.
+- 00_doit.R: Runs the entire RNA gene expression pipeline.
+- 01_load.R: Three seperate dataset from the GTEX-database, which includes SampleAttributesDS.tsv, SubjectPhenotypesDS.tsv and gene_reads.tsv.gz.
+- 02_clean.R: Applies our general cleaning strategy to both the SampleAttributesDS.tsv and gene_reads.tsv.gz
+- 03_augment.R: Selects the Tissue type we want to analyse and transposes the gene_reads matrix.
+- 04_analysis_descriptive_plots.R: Creates plots of the general trends of the data like the age distribution and death severity distribution of our selected tissue type.
+- 05_analysis_DESeq2.R: Computes the DESeq2 analysis and summarizes the results using both a volcano-plot and a heatmap.
+- 06_PCA.R: Does Principal component analysis on both unnormalized and normalized data and plots the resulting projections onto PC1 and PC2.
 
-Structure of Repository:
-
-- R folder contains the code where the the raw data is tidied in the first four files on order to use the transformed data for each of the following analyzing tasks. 
-
-- in subfile 04 a volcano plot is made to visualize how many genes are significantly different between the male and female patients (with p value = 0.05). After this, 100 genes are with the lowest p value are chosen in order to plot them against each other per patient on a heatmap where you differ between males and females.
-- in subfile 05 the cause of death per gender and age distribution within the gender is plotted.
-
-- in subfile 06 (modelling_linear) a non linear model is built to discriminate the age of a patient based on the gene expression. This is an optional part of this work.
-
-- in subfile 07 PCA is carried to evaluate whether the difference in expression profile can be used to distinguish between male and female muscle tissue. 
-
-- in folder doc the presentation is given
-
-- in folder figures the figures made within the plot pipeline are given.
-
-Data used:
-
-GTEx_Analysis_v8_Annotations_SampleAttributesDD.xlsx contains descriptions of the column headers in the GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt file. 
-
-GTEx_Analysis_v8_Annotations_SubjectPhenotypesDD.xlsx has descriptions of the headers in the GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt file. SubjectPhenotypes has column such as age group and gender. 
-
-GTEx_Analysis_2017-0605_v8_RNASeQCv1.1.9_gene_reads.gct.gz contains one column per sample, multiple samples pr patient. There is one column pr. patient pr. tissue. The first column contains the specific gene/ensemble that the row is testing for. 
+The resulting plots from the scripts are saved in the directory results. 
 
 Handling of NAs:
 
 We dropped rows with NA values for gene counts in this analysis because you would not be able to fully compare the patients to each other if they contained missing values.
 
+The data used to analyse gene expression was derived from the GTEX database which is a database of RNA- and DNA-sequencing experiments of multiple different tissue-samples. A link to the raw data can be found below.
+
+https://www.gtexportal.org/home/datasets
+
+The following files are downloaded when running the pipelines
+
+GTEx_Analysis_v8_Annotations_SampleAttributesDD.xlsx - Contains a general description of the samples like rin-number, tissue-type and death severity
+GTEx_Analysis_v8_Annotations_SubjectPhenotypesDD.xlsx - Contains a general descriptions of the patients like age and gender.
+GTEx_Analysis_2017-0605_v8_RNASeQCv1.1.9_gene_reads.gct.gz - Contains the the actual readcounts of the tissues and the Ensemble-ids of the genes. The columns of the dataset is the sample ids and the rows are the genes annotated with ensemble ids.
 
 
 
