@@ -1,2 +1,0 @@
-print("HEJ")
-print("CP sux")
