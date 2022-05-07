@@ -1,5 +1,5 @@
 ---
-title: "Investigation of differential gene expression based on gender in muscle tissue"
+title: "Investigation of differential gene expression in muscle tissue among men and women"
 author: "Group 5: Astrid (s184248), Caroline (s183493), Christian (s165476), Frederik (s184260) and Nils (s220672)"
 group number: 5
 
@@ -16,10 +16,15 @@ date: '2022-05-09'
 
 <div style="float: left; width: 40%;">
 <font size="3">
+
 - Is there a difference in gene expression between male and female muscle tissue?
+
   - Data from the Genotype-Tissue Expression (GTEx) data base.
+  
   - Focus on the expression of 20,000 genes. 
+  
   - Difference in cause of death and age (see figure).
+  
 </font>
 </div>
 
@@ -44,12 +49,17 @@ knitr::include_graphics("../results/data_distributions.png")
 **Description of analyses**
 
 - Principal Component Analysis
+
   - Reduce data dimension from 20,000 to 2
+  
   - Look for initial signs of data clustering
   
 - DESeq2
+
   - Calculate the log2fold change in gene expression between classes
+  
   - Classes: male and female
+  
 </font>
 
 ## Material and Methods - Cleaning the data 
@@ -101,7 +111,7 @@ knitr::include_graphics("../figures/workflow_clean.png")
 
 - Gene reads: 524 x 500
 
-  -> There are 524 patients in the final data
+  - There are 524 patients in the final data frames
     
 </font>
 </div>
@@ -126,19 +136,28 @@ knitr::include_graphics("../results/deseq2_volcano_plot.png")
 
 
 ## Discussion
+<font size="3">
 
-- Variance between samples (Age and cause of death)
+- PCA: Correcting for house-keeping-genes, samples clustered somewhat based on gender. 
+
+- DESeq2:
+
+  - Volcano plot: Several genes are differentially expressed. 
+  
+  - Heatmap: We did not see as clear a difference as we had expected, but there were some visible differences. 
+
+- Variance between samples (age and cause of death)
+
   - We did not take this into account
+  
   - Therefore, results are likely not replicable with new data. 
   
 - Project is reproducible
+
   - Data and pipeline available on GitHub
 
-## Conclusion
-
-- PCA: blabla
-- DESeq2
-  - Volcano plot: Several genes are differentially expressed. 
-  - Heatmap: We did not see as clear a difference as we had expected, but there were some visible differences. 
+- Choice of tissue
+  
+</font>
   
 
