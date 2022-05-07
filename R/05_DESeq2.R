@@ -138,7 +138,7 @@ heatmapdata <- normalized_counts_tibble %>%
     ),
     gencode_id = factor(gencode_id,
       levels = pull(
-        sorted_padj100,
+        sorted_padj10,
         gencode_id
       )
     ),
