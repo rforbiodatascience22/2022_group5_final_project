@@ -6,8 +6,7 @@ group number: 5
 output: 
     ioslides_presentation:
       logo: ../figures/DTU_logo-1.png 
-    incremental: true
-    self-included: true
+      self-contained: true
 
 date: '2022-05-09'
 ---
